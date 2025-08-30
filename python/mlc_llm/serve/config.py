@@ -135,6 +135,23 @@ class EngineConfig:  # pylint: disable=too-many-instance-attributes
     
     lora_dirs : List[str]
         List of directories containing LoRA adapters to load.
+
+    numa_tensor_parallel : bool
+        Whether to enable NUMA-aware tensor parallelism for CPU inference.
+        This distributes tensor parallel workers across NUMA nodes to optimize
+        bandwidth utilization and reduce inter-socket communication overhead.
+
+    numa_nodes : Optional[List[int]]
+        List of NUMA node IDs to use for tensor parallel workers.
+        If None, will auto-detect and use all available NUMA nodes.
+
+    numa_inter_node_penalty : float
+        Communication penalty factor for cross-NUMA-node operations (0.0-1.0).
+        Higher values discourage cross-node communication.
+
+    numa_prefer_local_memory : bool
+        Whether to prefer allocating memory on the local NUMA node.
+        This improves memory access latency but may increase communication overhead.
     """
 
     model: Optional[str] = None
@@ -162,6 +179,10 @@ class EngineConfig:  # pylint: disable=too-many-instance-attributes
     prefill_mode: Literal["chunked", "hybrid"] = "hybrid"
     verbose: bool = True
     lora_dirs: List[str] = field(default_factory=list)
+    numa_tensor_parallel: bool = False
+    numa_nodes: Optional[List[int]] = None
+    numa_inter_node_penalty: float = 0.3
+    numa_prefer_local_memory: bool = True
 
     def asjson(self) -> str:
         """Return the config in string of JSON format."""
