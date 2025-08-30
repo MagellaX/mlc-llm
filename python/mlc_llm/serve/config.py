@@ -132,9 +132,6 @@ class EngineConfig:  # pylint: disable=too-many-instance-attributes
 
     verbose : bool
         A boolean indicating whether to print logging info in engine.
-    
-    lora_dirs : List[str]
-        List of directories containing LoRA adapters to load.
 
     numa_tensor_parallel : bool
         Whether to enable NUMA-aware tensor parallelism for CPU inference.
@@ -178,7 +175,6 @@ class EngineConfig:  # pylint: disable=too-many-instance-attributes
     prefix_cache_max_num_recycling_seqs: Optional[int] = None
     prefill_mode: Literal["chunked", "hybrid"] = "hybrid"
     verbose: bool = True
-    lora_dirs: List[str] = field(default_factory=list)
     numa_tensor_parallel: bool = False
     numa_nodes: Optional[List[int]] = None
     numa_inter_node_penalty: float = 0.3
